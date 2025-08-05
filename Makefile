@@ -32,7 +32,7 @@ deps:
 # Build the binary
 build:
 	@echo "Building $(BINARY_NAME)..."
-	$(GO) build -o $(BINARY_NAME) ./cmd/uniac
+	$(GO) build -ldflags="-s -w" -o $(BINARY_NAME) ./cmd/uniac
 
 # Development execution
 dev:
