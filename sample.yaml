@@ -1,0 +1,8 @@
+vms:
+- name: vm1
+  cpu: 4
+  ram: 8
+disks:
+- kind: ssd
+  capacity: 128
+  fs: ext4
