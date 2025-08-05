@@ -1,4 +1,4 @@
-# Makefile for UnIaC - Universal Infrastructure as Code tool
+# Makefile for UnIaC - Unified Infrastructure as Code tool
 
 # Variables
 BINARY_NAME = uniac

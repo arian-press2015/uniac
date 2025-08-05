@@ -1,6 +1,6 @@
 # UnIaC
 
-UnIaC is a universal `Infrastructure as Code` tool that converts YAML configurations into existing `IaC` tools like `Terraform HCL`, with a focus on simplicity and provider-agnostic infrastructure management.
+UnIaC is a unified `Infrastructure as Code` tool that converts YAML configurations into existing `IaC` tools like `Terraform HCL`, with a focus on simplicity and provider-agnostic infrastructure management.
 
 The goal is to have a unified language for infrastructure, to prevent confusions, simplify transitions, and setting a common language.
 
@@ -26,10 +26,10 @@ make build
 
 ### Usage
 
-Run the uniac CLI with a YAML configuration file:
+Run the uniac CLI to get detailed help:
 
 ```bash
-./uniac infra.yaml
+./uniac
 ```
 
 ### Development
