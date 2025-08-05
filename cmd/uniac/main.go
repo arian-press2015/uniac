@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/arian-press2015/uniac/internal/loader"
+	"github.com/arian-press2015/uniac/pkg/mappings"
 	"github.com/spf13/cobra"
 )
 
@@ -32,13 +33,17 @@ var validateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		_, err = loader.Load(filepath)
+		w, err := loader.Load(filepath)
 		if err != nil {
 			fmt.Println("Error loading and validating:", err)
 			os.Exit(1)
 		}
 
 		fmt.Println("World parsed and validated successfully")
+
+		config, err := mappings.GenerateIaCConfig(w, "example-cloud-provider", "terraform")
+
+		fmt.Println("results:", config, err)
 	},
 }
 
