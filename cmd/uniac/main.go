@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/arian-press2015/uniac/pkg/loader"
+	"github.com/arian-press2015/uniac/internal/loader"
 )
 
 func main() {

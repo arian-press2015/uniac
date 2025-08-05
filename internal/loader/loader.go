@@ -3,9 +3,9 @@ package loader
 import (
 	"fmt"
 
+	"github.com/arian-press2015/uniac/internal/parsers"
+	"github.com/arian-press2015/uniac/internal/validators"
 	"github.com/arian-press2015/uniac/pkg/core"
-	"github.com/arian-press2015/uniac/pkg/parsers"
-	"github.com/arian-press2015/uniac/pkg/validators"
 )
 
 type Loader struct {
@@ -21,7 +21,7 @@ func NewLoader(filepath string) (*Loader, error) {
 	}
 
 	validator := &validators.ConfigValidator{
-		VMValidator:  &validators.VMValidator{},
+		VMValidator:   &validators.VMValidator{},
 		DiskValidator: &validators.DiskValidator{},
 	}
 
