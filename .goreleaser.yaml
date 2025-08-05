@@ -13,7 +13,7 @@ builds:
     main: ./cmd/uniac/main.go
 
 archives:
-  - format: tar.gz
+  - formats: [ 'tar.gz' ]
 
 changelog:
   sort: asc
