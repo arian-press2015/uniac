@@ -28,12 +28,6 @@ func RunCLI() error {
 				filepath = "infra.yaml"
 			}
 
-			loader, err := loader.NewLoader(filepath)
-			if err != nil {
-				fmt.Println("Error creating config loader:", err)
-				os.Exit(1)
-			}
-
 			w, err := loader.Load(filepath)
 			if err != nil {
 				fmt.Println("Error loading and validating:", err)
