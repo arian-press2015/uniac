@@ -1,0 +1,125 @@
+[[vms]]
+name = "web-vm"
+size = "m"
+type = "general-purpose"
+region = "us-east"
+image = "ami-123456"
+disks = [ "web-disk" ]
+
+  [vms.tags]
+  env = "prod"
+
+[[disks]]
+name = "web-disk"
+size = "10Gi"
+type = "ssd"
+
+  [disks.tags]
+  purpose = "storage"
+
+[[databases]]
+name = "app-db"
+storage = "20Gi"
+region = "us-east"
+engine = "mysql"
+version = 8
+
+  [databases.tags]
+  app = "web"
+
+[[file_storage]]
+name = "shared-files"
+size = "100Gi"
+type = "standard"
+region = "us-east"
+protocol = "NFS"
+
+  [file_storage.tags]
+  purpose = "shared"
+
+[[object_storage]]
+name = "media-bucket"
+size = "100Gi"
+type = "standard"
+region = "us-east"
+access = "public"
+
+  [object_storage.tags]
+  type = "media"
+
+[[cdn]]
+name = "media-cdn"
+origin = "media-bucket"
+region = "global"
+ttl = 3_600
+ssl = true
+
+  [cdn.tags]
+  purpose = "delivery"
+
+[[dns]]
+name = "web.example.com"
+type = "A"
+value = "192.0.2.1"
+ttl = 300
+region = "us-east"
+
+  [dns.tags]
+  env = "prod"
+
+[[network]]
+name = "vpc-1"
+cidr = "10.0.0.0/16"
+region = "us-east"
+
+  [[network.subnets]]
+  name = "subnet-1"
+  cidr = "10.0.1.0/24"
+
+[[load_balancer]]
+name = "app-lb"
+type = "application"
+region = "us-east"
+port = 80
+
+  [[load_balancer.targets]]
+  name = "web-app"
+  port = 8_080
+
+  [[load_balancer.targets]]
+  name = "api-app"
+  port = 9_090
+
+  [load_balancer.tags]
+  env = "prod"
+
+[[firewall]]
+name = "web-sg"
+type = "security-group"
+network = "vpc-1"
+
+  [[firewall.rules]]
+  type = "ingress"
+  protocol = "tcp"
+  port = 80
+  source = "0.0.0.0/0"
+
+[[firewall]]
+name = "app-waf"
+type = "waf"
+network = "vpc-1"
+
+  [[firewall.rules]]
+  type = "block"
+  condition = "sql-injection"
+
+[[access_management.roles]]
+name = "admin"
+permissions = [ "vm:create", "db:read", "db:write" ]
+
+[[access_management.users]]
+name = "admin-user"
+role = "admin"
+
+  [access_management.users.tags]
+  team = "ops"
