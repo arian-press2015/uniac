@@ -19,6 +19,9 @@ NEXT_VERSION = $(shell \
   else \
     printf "%s" "$(VERSION)"; \
   fi; fi; fi)
+PLUGIN_SRC = examples/mappings/example-mapper.go
+PLUGIN_OUT = example-mapper.so
+PLUGIN_DEST = ~/.uniac/plugins
 
 # Default target
 all: help
@@ -63,6 +66,10 @@ release:
 	git push origin v$(NEXT_VERSION)
 	@echo "Release triggered. Check GitHub Actions for progress."
 
+# Build the example plugin
+plugin:
+	mkdir -pv $(PLUGIN_DEST) && go build -buildmode=plugin -o $(PLUGIN_OUT) $(PLUGIN_SRC) && cp $(PLUGIN_OUT) $(PLUGIN_DEST)
+
 # Help target to display available commands
 help:
 	@echo "UnIaC Makefile Help"
@@ -74,9 +81,10 @@ help:
 	@echo "  dev       - Run in development mode"
 	@echo "  run       - Build and run the UnIaC binary with infra.yaml"
 	@echo "  clean     - Remove binary and clean up"
-	@echo "  release   - Create a Git tag and trigger a release (set INCREMENT, e.g., make release INCREMENT=MINOR)"	
+	@echo "  release   - Create a Git tag and trigger a release (set INCREMENT, e.g., make release INCREMENT=MINOR)"
+	@echo "  plugin    - Build the example plugin and move it to plugins directory"	
 	@echo "-------------------"
 	@echo "Usage: make <target>"
 
 # Phony targets to avoid conflicts with files
-.PHONY: all deps build dev run clean release help
+.PHONY: all deps build dev run clean release plugin help

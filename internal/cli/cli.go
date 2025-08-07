@@ -37,8 +37,12 @@ func RunCLI() error {
 			fmt.Println("World parsed and validated successfully")
 
 			config, err := mappings.GenerateIaCConfig(w, "example-cloud-provider", "terraform")
+			if err != nil {
+				fmt.Println("Error in generating IaC output:", err)
+				os.Exit(1)
+			}
 
-			fmt.Println("results:", config, err)
+			fmt.Println("results:", config)
 		},
 	}
 
