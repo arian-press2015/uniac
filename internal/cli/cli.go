@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/arian-press2015/uniac/internal/loader"
-	"github.com/arian-press2015/uniac/pkg/mappings"
+	"github.com/arian-press2015/uniac/internal/mappings"
 	"github.com/spf13/cobra"
 )
 
