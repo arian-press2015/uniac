@@ -19,7 +19,7 @@ NEXT_VERSION = $(shell \
   else \
     printf "%s" "$(VERSION)"; \
   fi; fi; fi)
-PLUGIN_SRC = examples/mappings/example-IaCMapper.go
+PLUGIN_SRC = examples/mappings/example_IaCMapper.go
 PLUGIN_OUT = example-IaCMapper.so
 PLUGIN_DEST = ~/.uniac/plugins
 
