@@ -4,17 +4,16 @@ import (
 	"fmt"
 
 	"github.com/arian-press2015/uniac/pkg/core"
-	"github.com/arian-press2015/uniac/pkg/mappings"
+	"github.com/arian-press2015/uniac/pkg/plugins"
 )
 
 type ExampleMapper struct{}
 
-func (em *ExampleMapper) Provider() string {
-	return "example-cloud-provider"
-}
-
-func (em *ExampleMapper) IaC() string {
-	return "terraform"
+func (em *ExampleMapper) GetMetadata() plugins.MapperMetadata {
+	return plugins.MapperMetadata{
+		Provider: "example-cloud-provider",
+		IaC: "terraform",
+	}
 }
 
 func (em *ExampleMapper) Generate(w *core.World) (string, error) {
@@ -26,6 +25,6 @@ func (em *ExampleMapper) Generate(w *core.World) (string, error) {
 	return hcl, nil
 }
 
-var Mapper mappings.Mapper = &ExampleMapper{}
+var Mapper plugins.MapperPluginInterface = &ExampleMapper{}
 
 func main() {}
