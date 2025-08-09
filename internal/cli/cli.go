@@ -85,10 +85,25 @@ func (c *CLI) RunCLI() error {
 		},
 	}
 
+	var listPluginsCmd = &cobra.Command{
+	Use:   "list-plugins",
+	Short: "List all loaded plugins",
+	Long:  "List-plugins displays a table of all loaded plugins with their kinds, paths, statuses, and metadata",
+	Run: func(cmd *cobra.Command, args []string) {
+		c, err := NewCLI()
+		if err != nil {
+			fmt.Println("Error initializing CLI:", err)
+			os.Exit(1)
+		}
+		fmt.Print(c.pm.String())
+	},
+}
+
 	generateCmd.Flags().StringP("file", "f", "infra.yaml", "Path to the configuration file")
 
 	rootCmd.AddCommand(validateCmd)
 	rootCmd.AddCommand(generateCmd)
+	rootCmd.AddCommand(listPluginsCmd)
 
 	return rootCmd.Execute()
 }

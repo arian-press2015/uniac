@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/arian-press2015/uniac/pkg/plugins"
+	"github.com/olekukonko/tablewriter"
 )
 
 type PluginStatus string
@@ -25,6 +26,15 @@ type Plugin struct {
 	Status   PluginStatus
 	Metadata interface{}
 	Instance interface{}
+}
+
+func (p *Plugin) String() string {
+	metadataStr := "N/A"
+	if p.Metadata != nil {
+		metadataStr = fmt.Sprintf("%v", p.Metadata)
+	}
+	return fmt.Sprintf("Plugin{Kind: %s, Path: %s, Status: %s, Metadata: %s}",
+		p.Kind, p.Path, p.Status, metadataStr)
 }
 
 type PluginManager struct {
@@ -43,6 +53,33 @@ func NewPluginManager() *PluginManager {
 		},
 		pluginRegistry: make(map[plugins.PluginKind][]*Plugin),
 	}
+}
+
+func (pm *PluginManager) String() string {
+	var builder strings.Builder
+
+	table := tablewriter.NewWriter(&builder)
+	table.Header([]string{"Kind", "Path", "Status", "Metadata"})
+	
+	for kind, plugins := range pm.pluginRegistry {
+		for _, plugin := range plugins {
+			metadataStr := "N/A"
+			if plugin.Metadata != nil {
+				metadataStr = fmt.Sprintf("%v", plugin.Metadata)
+			}
+			
+			table.Append([]string{
+				string(kind),
+				plugin.Path,
+				string(plugin.Status),
+				metadataStr,
+			})
+		}
+	}
+
+	table.Render()
+
+	return builder.String()
 }
 
 func (pm *PluginManager) LoadPlugins() error {
@@ -120,7 +157,7 @@ func (pm *PluginManager) LoadPlugins() error {
 		plugin := &Plugin{
 			Kind:     plugins.PluginKind(kindStr),
 			Path:     filePath,
-			Status:   PluginStatusFailure,
+			Status:   PluginStatusSuccess,
 			Metadata: metadata,
 			Instance: sym,
 		}
