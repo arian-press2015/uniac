@@ -9,12 +9,13 @@ import (
 )
 
 func GenerateIaCConfig(w *core.World, provider string, iac string) (string, error) {
-	if err := plugins.LoadPlugins(); err != nil {
+	pm := plugins.NewPluginManager()
+	if err := pm.LoadPlugins(); err != nil {
 		fmt.Println("Failed to load plugins:", err)
 		os.Exit(1)
 	}
 
-	mapper, err := plugins.GetMapper(provider, iac)
+	mapper, err := plugins.GetMapper(pm, provider, iac)
 	if err != nil {
 		return "", err
 	}
