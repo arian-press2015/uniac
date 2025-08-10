@@ -24,7 +24,7 @@ func Load(filepath string) (*core.World, error) {
 		return nil, err
 	}
 
-	err = validators.Validate(config)
+	err = config.Validate()
 	if err != nil {
 		return nil, err
 	}

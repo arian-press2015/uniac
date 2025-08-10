@@ -17,13 +17,14 @@ type Config struct {
 }
 
 type VM struct {
-	Name   string            `yaml:"name" validate:"required"`
-	Size   string            `yaml:"size" validate:"required,oneof=xs s m l xl"`
-	Type   string            `yaml:"type" validate:"required,oneof=general-purpose gpu-optimized ram-optimized compute-optimized"`
-	Region string            `yaml:"region" validate:"required"`
-	Image  string            `yaml:"image" validate:"required"`
-	Disks  []string          `yaml:"disks" validate:"dive,required"`
-	Tags   map[string]string `yaml:"tags" validate:"-"`
+	Name    string            `yaml:"name" validate:"required"`
+	Size    string            `yaml:"size" validate:"required,oneof=xs s m l xl"`
+	Type    string            `yaml:"type" validate:"required,oneof=general-purpose gpu-optimized ram-optimized compute-optimized"`
+	Region  string            `yaml:"region" validate:"required"`
+	Network string            `yaml:"network" validate:"required"`
+	Image   string            `yaml:"image" validate:"required"`
+	Disks   []string          `yaml:"disks" validate:"dive,required"`
+	Tags    map[string]string `yaml:"tags" validate:"-"`
 }
 
 type Disk struct {

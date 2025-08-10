@@ -4,6 +4,7 @@ vms:
     type: general-purpose
     region: us-east
     image: ami-123456
+    network: vpc-1
     disks:
       - web-disk
     tags:
