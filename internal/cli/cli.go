@@ -2,12 +2,8 @@ package cli
 
 import (
 	"fmt"
-	"os"
 
-	"github.com/arian-press2015/uniac/internal/loader"
-	"github.com/arian-press2015/uniac/internal/mappings"
 	"github.com/arian-press2015/uniac/internal/plugins"
-	"github.com/spf13/cobra"
 )
 
 type CLI struct {
@@ -23,116 +19,11 @@ func NewCLI() (*CLI, error) {
 }
 
 func (c *CLI) RunCLI() error {
-	var rootCmd = &cobra.Command{
-		Use:   "uniac",
-		Short: "uniac - Unified Infrastructure as Code",
-		Long:  "uniac is a tool for managing infrastructure as code using a unified language",
-	}
+	var rootCmd = generateRootCmd()
 
-	var validateCmd = &cobra.Command{
-		Use:   "validate",
-		Short: "Validate a configuration file",
-		Long:  "Validate reads a configuration file (default: infra.yaml) and shows errors if any found",
-		Run: func(cmd *cobra.Command, args []string) {
-			filepath, err := cmd.Flags().GetString("file")
-			if err != nil {
-				fmt.Println("Error getting file flag:", err)
-				os.Exit(1)
-			}
-
-			_, err = loader.Load(filepath)
-			if err != nil {
-				fmt.Println("Error loading and validating:", err)
-				os.Exit(1)
-			}
-
-			fmt.Println("World parsed and validated successfully")
-		},
-	}
-
-	validateCmd.Flags().StringP("file", "f", "infra.yaml", "Path to the configuration file")
-
-	var generateCmd = &cobra.Command{
-		Use:   "generate <provider> <iac>",
-		Short: "Generate infrastructure configuration",
-		Long:  "Generate creates an infrastructure configuration for the specified provider and IaC tool using a configuration file",
-		Args:  cobra.ExactArgs(2),
-		Run: func(cmd *cobra.Command, args []string) {
-			provider := args[0]
-			iac := args[1]
-
-			filepath, err := cmd.Flags().GetString("file")
-			if err != nil {
-				fmt.Println("Error getting file flag:", err)
-				os.Exit(1)
-			}
-
-			w, err := loader.Load(filepath)
-			if err != nil {
-				fmt.Println("Error loading and validating:", err)
-				os.Exit(1)
-			}
-
-			fmt.Println("World parsed and validated successfully")
-
-			config, err := mappings.GenerateIaCConfig(c.pm, w, provider, iac)
-			if err != nil {
-				fmt.Println("Error in generating IaC output:", err)
-				os.Exit(1)
-			}
-
-			fmt.Println("results:", config)
-		},
-	}
-
-	var pluginsCmd = &cobra.Command{
-		Use:   "plugins",
-		Short: "Manage plugins",
-	}
-
-	var listPluginsCmd = &cobra.Command{
-		Use:   "list",
-		Short: "List all loaded plugins",
-		Long:  "List displays a table of all loaded plugins with their kinds, paths, statuses, and metadata",
-		Run: func(cmd *cobra.Command, args []string) {
-			c, err := NewCLI()
-			if err != nil {
-				fmt.Println("Error initializing CLI:", err)
-				os.Exit(1)
-			}
-			fmt.Print(c.pm.String())
-		},
-	}
-
-	var deletePluginCmd = &cobra.Command{
-		Use:   "delete <plugin-name>",
-		Short: "Delete a plugin by its name",
-		Long:  "Delete removes a plugin from the registry using its file name",
-		Args:  cobra.ExactArgs(1),
-		Run: func(cmd *cobra.Command, args []string) {
-			c, err := NewCLI()
-			if err != nil {
-				fmt.Println("Error initializing CLI:", err)
-				os.Exit(1)
-			}
-			pluginName := args[0]
-
-			if err := c.pm.DeletePlugin(pluginName); err != nil {
-				fmt.Printf("Error deleting plugin: %v\n", err)
-				os.Exit(1)
-			}
-			fmt.Printf("Plugin %s deleted successfully\n", pluginName)
-		},
-	}
-
-	generateCmd.Flags().StringP("file", "f", "infra.yaml", "Path to the configuration file")
-
-	pluginsCmd.AddCommand(listPluginsCmd)
-	pluginsCmd.AddCommand(deletePluginCmd)
-
-	rootCmd.AddCommand(validateCmd)
-	rootCmd.AddCommand(generateCmd)
-	rootCmd.AddCommand(pluginsCmd)
+	registerValidateCli(rootCmd)
+	registerGenerateCli(rootCmd, c)
+	registerPluginsCli(rootCmd)
 
 	return rootCmd.Execute()
 }
