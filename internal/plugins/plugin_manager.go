@@ -203,7 +203,7 @@ func (pm *PluginManager) FindPlugin(kind plugins.PluginKind, desiredMeta interfa
 	}
 
 	for _, plugin := range plugins {
-		if plugin.Status == PluginStatusFailure {
+		if plugin.Status == PluginStatusSuccess {
 			if desiredMeta == nil || reflect.DeepEqual(plugin.Metadata, desiredMeta) {
 				return plugin, nil
 			}
