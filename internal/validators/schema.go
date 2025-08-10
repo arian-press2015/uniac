@@ -3,17 +3,17 @@ package validators
 import "github.com/mitchellh/mapstructure"
 
 type Config struct {
-	VMs              []VM             `yaml:"vms" validate:"required,dive"`
-	Disks            []Disk           `yaml:"disks" validate:"required,dive"`
-	Databases        []Database       `yaml:"databases" validate:"required,dive"`
-	FileStorage      []FileStorage    `yaml:"file_storage" validate:"required,dive"`
-	ObjectStorage    []ObjectStorage  `yaml:"object_storage" validate:"required,dive"`
-	CDN              []CDN            `yaml:"cdn" validate:"required,dive"`
-	DNS              []DNS            `yaml:"dns" validate:"required,dive"`
-	Network          []Network        `yaml:"network" validate:"required,dive"`
-	LoadBalancer     []LoadBalancer   `yaml:"load_balancer" validate:"required,dive"`
-	Firewall         []Firewall       `yaml:"firewall" validate:"required,dive"`
-	AccessManagement AccessManagement `yaml:"access_management" validate:"required"`
+	VMs              []VM             `yaml:"vms" validate:"omitempty,dive"`
+	Disks            []Disk           `yaml:"disks" validate:"omitempty,dive"`
+	Databases        []Database       `yaml:"databases" validate:"omitempty,dive"`
+	FileStorage      []FileStorage    `yaml:"file_storage" validate:"omitempty,dive"`
+	ObjectStorage    []ObjectStorage  `yaml:"object_storage" validate:"omitempty,dive"`
+	CDN              []CDN            `yaml:"cdn" validate:"omitempty,dive"`
+	DNS              []DNS            `yaml:"dns" validate:"omitempty,dive"`
+	Network          []Network        `yaml:"network" validate:"omitempty,dive"`
+	LoadBalancer     []LoadBalancer   `yaml:"load_balancer" validate:"omitempty,dive"`
+	Firewall         []Firewall       `yaml:"firewall" validate:"omitempty,dive"`
+	AccessManagement AccessManagement `yaml:"access_management" validate:"omitempty"`
 }
 
 type VM struct {
