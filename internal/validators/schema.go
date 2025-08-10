@@ -3,9 +3,9 @@ package validators
 import "github.com/mitchellh/mapstructure"
 
 type Config struct {
-	VMs              []VM             `yaml:"vms" validate:"omitempty,dive"`
-	Disks            []Disk           `yaml:"disks" validate:"omitempty,dive"`
-	Databases        []Database       `yaml:"databases" validate:"omitempty,dive"`
+	VM               []VM             `yaml:"vms" validate:"omitempty,dive"`
+	Disk             []Disk           `yaml:"disks" validate:"omitempty,dive"`
+	Database         []Database       `yaml:"databases" validate:"omitempty,dive"`
 	FileStorage      []FileStorage    `yaml:"file_storage" validate:"omitempty,dive"`
 	ObjectStorage    []ObjectStorage  `yaml:"object_storage" validate:"omitempty,dive"`
 	CDN              []CDN            `yaml:"cdn" validate:"omitempty,dive"`
@@ -27,10 +27,10 @@ type VM struct {
 }
 
 type Disk struct {
-	Name       string            `yaml:"name" validate:"required"`
-	Size       string            `yaml:"size" validate:"required,storage_size"`
-	Type       string            `yaml:"type" validate:"required,oneof=hdd ssd nvme ultra-ssd"`
-	Tags       map[string]string `yaml:"tags" validate:"-"`
+	Name string            `yaml:"name" validate:"required"`
+	Size string            `yaml:"size" validate:"required,storage_size"`
+	Type string            `yaml:"type" validate:"required,oneof=hdd ssd nvme ultra-ssd"`
+	Tags map[string]string `yaml:"tags" validate:"-"`
 }
 
 type Database struct {

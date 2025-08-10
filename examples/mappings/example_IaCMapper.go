@@ -18,7 +18,7 @@ func (em *ExampleMapper) GetMetadata() plugins.MapperMetadata {
 
 func (em *ExampleMapper) Generate(w *core.World) (string, error) {
 	hcl := "resource \"aws_instance\" \"example\" {\n"
-	for _, vm := range w.VMs {
+	for _, vm := range w.VM {
 		hcl += fmt.Sprintf("  instance_type = \"t2.micro\"\n  ami = \"ami-123456\"\n  tags = { Name = \"%s\" }\n", vm.Name)
 	}
 	hcl += "}\n"

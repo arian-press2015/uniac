@@ -3,25 +3,25 @@ package core
 import "github.com/arian-press2015/uniac/internal/validators"
 
 type World struct {
-	VMs       []VM
-	Disks     []Disk
-	Databases []Database
+	VM       []VM
+	Disk     []Disk
+	Database []Database
 	Network   []Network
 }
 
 func NewWorld(config *validators.Config) (*World, error) {
-	vms := make([]VM, len(config.VMs))
-	for i, vm := range config.VMs {
+	vms := make([]VM, len(config.VM))
+	for i, vm := range config.VM {
 		vms[i] = *NewVM(&vm)
 	}
 
-	disks := make([]Disk, len(config.Disks))
-	for i, disk := range config.Disks {
+	disks := make([]Disk, len(config.Disk))
+	for i, disk := range config.Disk {
 		disks[i] = *NewDisk(&disk)
 	}
 
-	databases := make([]Database, len(config.Databases))
-	for i, db := range config.Databases {
+	databases := make([]Database, len(config.Database))
+	for i, db := range config.Database {
 		databases[i] = *NewDatabase(&db)
 	}
 
@@ -31,9 +31,9 @@ func NewWorld(config *validators.Config) (*World, error) {
 	}
 
 	w := &World{
-		VMs:       vms,
-		Disks:     disks,
-		Databases: databases,
+		VM:       vms,
+		Disk:     disks,
+		Database: databases,
 		Network:   networks,
 	}
 
