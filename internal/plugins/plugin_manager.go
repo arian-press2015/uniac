@@ -23,6 +23,7 @@ const (
 type Plugin struct {
 	Kind     plugins.PluginKind
 	Path     string
+	Name     string
 	Status   PluginStatus
 	Metadata interface{}
 	Instance interface{}
@@ -33,8 +34,16 @@ func (p *Plugin) String() string {
 	if p.Metadata != nil {
 		metadataStr = fmt.Sprintf("%v", p.Metadata)
 	}
-	return fmt.Sprintf("Plugin{Kind: %s, Path: %s, Status: %s, Metadata: %s}",
-		p.Kind, p.Path, p.Status, metadataStr)
+	return fmt.Sprintf("Plugin{Kind: %s, Name: %s, Path: %s, Status: %s, Metadata: %s}",
+		p.Kind, p.Name, p.Path, p.Status, metadataStr)
+}
+
+func (p *Plugin) Delete() error {
+	err := os.Remove(p.Path)
+	if err != nil {
+		return fmt.Errorf("failed to delete the plugin %s: %v", p.Path, err)
+	}
+	return nil
 }
 
 type PluginManager struct {
@@ -59,17 +68,18 @@ func (pm *PluginManager) String() string {
 	var builder strings.Builder
 
 	table := tablewriter.NewWriter(&builder)
-	table.Header([]string{"Kind", "Path", "Status", "Metadata"})
-	
+	table.Header([]string{"Kind", "Name", "Path", "Status", "Metadata"})
+
 	for kind, plugins := range pm.pluginRegistry {
 		for _, plugin := range plugins {
 			metadataStr := "N/A"
 			if plugin.Metadata != nil {
 				metadataStr = fmt.Sprintf("%v", plugin.Metadata)
 			}
-			
+
 			table.Append([]string{
 				string(kind),
+				plugin.Name,
 				plugin.Path,
 				string(plugin.Status),
 				metadataStr,
@@ -80,6 +90,22 @@ func (pm *PluginManager) String() string {
 	table.Render()
 
 	return builder.String()
+}
+
+func (pm *PluginManager) DeletePlugin(pluginName string) error {
+	for kind, plugins := range pm.pluginRegistry {
+		for i, plugin := range plugins {
+			if plugin.Name == pluginName {
+				plugin.Delete()
+				pm.pluginRegistry[kind] = append(plugins[:i], plugins[i+1:]...)
+				if len(pm.pluginRegistry[kind]) == 0 {
+					delete(pm.pluginRegistry, kind)
+				}
+				return nil
+			}
+		}
+	}
+	return fmt.Errorf("plugin with name %s not found", pluginName)
 }
 
 func (pm *PluginManager) LoadPlugins() error {
@@ -122,6 +148,7 @@ func (pm *PluginManager) LoadPlugins() error {
 			log.Printf("Failed to open plugin %s: %v", filePath, err)
 			plugin := &Plugin{
 				Kind:   plugins.PluginKind(kindStr),
+				Name:   strings.TrimSuffix(file.Name(), ".so"),
 				Path:   filePath,
 				Status: PluginStatusFailure,
 			}
@@ -140,6 +167,7 @@ func (pm *PluginManager) LoadPlugins() error {
 			log.Printf("Symbol %s not found in %s: %v", symbol, filePath, err)
 			plugin := &Plugin{
 				Kind:   plugins.PluginKind(kindStr),
+				Name:   strings.TrimSuffix(file.Name(), ".so"),
 				Path:   filePath,
 				Status: PluginStatusFailure,
 			}
@@ -156,6 +184,7 @@ func (pm *PluginManager) LoadPlugins() error {
 
 		plugin := &Plugin{
 			Kind:     plugins.PluginKind(kindStr),
+			Name:     strings.TrimSuffix(file.Name(), ".so"),
 			Path:     filePath,
 			Status:   PluginStatusSuccess,
 			Metadata: metadata,
