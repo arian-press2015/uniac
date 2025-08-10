@@ -30,7 +30,6 @@ type Disk struct {
 	Name       string            `yaml:"name" validate:"required"`
 	Size       string            `yaml:"size" validate:"required,storage_size"`
 	Type       string            `yaml:"type" validate:"required,oneof=hdd ssd nvme ultra-ssd"`
-	Filesystem string            `yaml:"filesystem" validate:"omitempty,oneof=ext4 xfs ntfs"`
 	Tags       map[string]string `yaml:"tags" validate:"-"`
 }
 

@@ -15,7 +15,6 @@ func NewDisk(configDisk *validators.Disk) *Disk {
 		Name:       configDisk.Name,
 		Size:       configDisk.Size,
 		Type:       configDisk.Type,
-		Filesystem: configDisk.Filesystem,
 		Tags:       configDisk.Tags,
 	}
 }
